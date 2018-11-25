@@ -3,6 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#C62828" />
   <title>PI</title>
 
   <!-- CSS  -->
@@ -20,7 +21,9 @@
     //define page title
     $title = 'PI';
 
-  ?>
+    //include header template
+    //require('layout/header.php');
+?>
 
   <!-- NAVEGACION -->
   <nav class="red darken-3" role="navigation">
@@ -48,7 +51,7 @@
               echo '</ul>';
             }
 						
-      ?>
+				?>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
     </div>
   </nav>
@@ -61,7 +64,7 @@
         <?php
             if($user->is_logged_in()){
               $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :username');
-	      $stmt->execute(array(':username' => $_SESSION['username']));
+						  $stmt->execute(array(':username' => $_SESSION['username']));
               $row = $stmt->fetch(PDO::FETCH_ASSOC);
               echo '<h1 class="header center white-text">Hola, '; echo htmlspecialchars($row['Nombre'], ENT_QUOTES); echo '.</h1>';
               echo '<div class="row center">';
@@ -75,7 +78,8 @@
               echo '</div>';
             }
 						
-	?>
+				?>
+
 
         <br><br>
 
@@ -92,7 +96,7 @@
       <?php
         if($user->is_logged_in()){
           $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :username');
-	  $stmt->execute(array(':username' => $_SESSION['username']));
+					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
           echo "<h3 class=\"header rteal-text\">Hola, ", htmlspecialchars($row['Nombre'], ENT_QUOTES), " ", htmlspecialchars($row['Apellido'], ENT_QUOTES), ".</h3>";
           echo "   <div class=\"row\">";
@@ -127,9 +131,11 @@
           echo '  </div>';
           echo '</div>';
           }
-      ?>
-	    
+			?>
+
+      
       </div>
+
     </div>
 
 
@@ -150,7 +156,7 @@
 
   </div>
 
-	
+
   <div class="parallax-container valign-wrapper">
     <div class="section no-pad-bot">
       <div class="container">
