@@ -32,14 +32,22 @@
 	  if (!isset($_POST['username'])) $error[] = "Por favor completá todos los campos.";
 	  if (!isset($_POST['password'])) $error[] = "Por favor completá todos los campos.";
 
-    if ($_POST['password'] != 1 && $_POST['password'] != 2) $error[] = "ID Tipo Usuario incorrecto (1 o 2).";
-
-	  $con  = mysqli_connect("localhost","root","","Biblioteca");
-    $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE ID_Cliente = :idusuario');
+    if($_POST['username'] == NULL){ $error[] = "No ingresaste ID de usuario."; }
+    else if ($_POST['username'] < 1){ $error[] = "El ID de usuario debe ser mayor a 0.";
+    }
+    if($_POST['password'] == NULL){ $error[] = "No ingresaste ID de tipo de usuario."; }
+    else {
+      if ($_POST['password'] != 1 && $_POST['password'] != 2) { $error[] = "ID Tipo Usuario incorrecto (1 o 2)."; }
+      else {
+      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE ID_Cliente = :idusuario');
 			$stmt->execute(array(
         ':idusuario' => $_POST['username'],
         ':idtipo' => $_POST['password']
 			));
+    }
+    }
+    
 
   }//end if submit
 
