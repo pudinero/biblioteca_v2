@@ -117,11 +117,12 @@
           
 
           while($row = mysqli_fetch_array($result)){
+            $nombre = iconv('ISO-8859-1','UTF-8',$row['Nombre']);
             $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
             echo '<tr>';
             echo '  <td>', htmlspecialchars($row['ID_Cliente'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['ID_Tipo_Usuario'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Nombre'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($nombre, ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
             echo '  <td>', htmlspecialchars($row['Usuario'], ENT_QUOTES), '</td>';
             echo '</tr>';

@@ -16,7 +16,7 @@
   <?php require('../includes/config.php'); 
 
     //if not logged in redirect to login page
-    if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
+    //if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
 
     //define page title
     $title = 'PI';
@@ -86,11 +86,12 @@
           $result = mysqli_query($con,"SELECT * FROM Clientes");
 
           while($row = mysqli_fetch_array($result)){
+            $nombre = iconv('ISO-8859-1','UTF-8',$row['Nombre']);
             $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
             echo '<tr>';
             echo '  <td>', htmlspecialchars($row['ID_Cliente'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['ID_Tipo_Usuario'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Nombre'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($nombre, ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
             echo '  <td>', htmlspecialchars($row['Direccion'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Localidad'], ENT_QUOTES), '</td>';
