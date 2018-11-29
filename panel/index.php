@@ -60,7 +60,7 @@
     <br />
     <div class="row">
     
-      <table class="responsive-table">
+      <table class="striped responsive-table">
         <thead>
           <tr>
               <th>ID Cliente</th>
@@ -85,12 +85,15 @@
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
           $result = mysqli_query($con,"SELECT * FROM Clientes");
 
+          
+
           while($row = mysqli_fetch_array($result)){
+            $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
             echo '<tr>';
             echo '  <td>', htmlspecialchars($row['ID_Cliente'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['ID_Tipo_Usuario'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Nombre'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Apellido'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
             echo '  <td>', htmlspecialchars($row['Direccion'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Localidad'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Telefono'], ENT_QUOTES), '</td>';
@@ -128,35 +131,7 @@
           </tbody>
         </table>
         <p><p><p><p>
-
-        <table class="striped responsive-table">
-        <thead>
-          <tr>
-              <th>Name</th>
-              <th>Item Name</th>
-              <th>Item Price</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>$0.87</td>
-          </tr>
-          <tr>
-            <td>Alan</td>
-            <td>Jellybean</td>
-            <td>$3.76</td>
-          </tr>
-          <tr>
-            <td>Jonathan</td>
-            <td>Lollipop</td>
-            <td>$7.00</td>
-          </tr>
-        </tbody>
-      </table>
-      
+        <h5 class="header col s12 light">- <a href="/">Volver al inicio</a>.</h5>
       </div>
 
     </div>
