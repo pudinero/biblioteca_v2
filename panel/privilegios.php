@@ -25,6 +25,30 @@
     //require('layout/header.php');
 ?>
 
+
+<?php
+  if(isset($_POST['submit'])){
+
+	  if (!isset($_POST['username'])) $error[] = "Por favor completá todos los campos.";
+	  if (!isset($_POST['password'])) $error[] = "Por favor completá todos los campos.";
+
+    if ($_POST['password'] != 1 && $_POST['password'] != 2) $error[] = "ID Tipo Usuario incorrecto (1 o 2).";
+
+	  $con  = mysqli_connect("localhost","root","","Biblioteca");
+    $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE ID_Cliente = :idusuario');
+			$stmt->execute(array(
+        ':idusuario' => $_POST['username'],
+        ':idtipo' => $_POST['password']
+			));
+
+  }//end if submit
+
+  //define page title
+  $title = 'PI';
+
+  ?>
+
+
   <!-- NAVEGACION -->
   <nav class="red darken-3" role="navigation">
     <div class="nav-wrapper container">
@@ -60,7 +84,10 @@
     <br />
     <div class="row">
     
-      <table class="striped responsive-table truncate">
+    <h5 class="header light col s12 left">Lista de usuarios.</h5><br>
+            
+      <table class="striped responsive-table truncate col s6">
+      
         <thead>
           <tr>
               <th>ID Cliente</th>
@@ -68,7 +95,6 @@
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Usuario</th>
-              <th>Acción</th>
           </tr>
         </thead>
       <?php
@@ -90,16 +116,6 @@
             echo '  <td>', htmlspecialchars($row['Nombre'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
             echo '  <td>', htmlspecialchars($row['Usuario'], ENT_QUOTES), '</td>';
-            if ($row['ID_Tipo_Usuario'] == 1){
-              echo '<td><button class="btn waves-effect waves-light red" type="submit" name="action">Quitar administrador
-              <i class="material-icons left">clear</i>
-              </button></td>';
-            }
-            else {
-              echo '<td><button class="btn waves-effect waves-light green" type="submit" name="action">Hacer administrador
-              <i class="material-icons left">check</i>
-              </button></td>';
-            }
             echo '</tr>';
           }
         }
@@ -129,30 +145,63 @@
 
           </tbody>
         </table>
-        <p><p><p><p>
-        <!-- <h5 class="header col s12 light">- <a href="/privilegios.php">Modificar privilegios</a>.</h5> -->
+
+          <form class="col s6" role="form" method="post" action="">
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="icon_prefix username" type="text" class="validate black-text" name="username" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">ID Usuario</label>
+                </div>
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">vpn_key</i>
+                  <input id="icon_telephone password" type="text" class="validate black-text" name="password" tabindex="2">
+                  <label for="icon_telephone" class="black-text">ID Tipo Usuario</label>
+                </div>
+              </div>
+
+              <div class="row center">
+                <?php
+				        //check for any errors
+				        if(isset($error)){
+					        foreach($error as $error){
+						        echo '<p class="red">'.$error.'</p>';
+					        }
+				        }
+
+				        if(isset($_GET['action'])){
+
+					        //check the action
+					        switch ($_GET['action']) {
+						        case 'active':
+							        echo "<h2 class='green'>Tu cuenta ha sido activada, ahora podés ingresar al sistema.</h2>";
+							      break;
+					  	      case 'reset':
+							        echo "<h2 class='green'>Te hemos enviado un enlace por correo electrónico para reiniciar tu contraseña.</h2>";
+							      break;
+						        case 'resetAccount':
+							        echo "<h2 class='green'>La contraseña ha sido modificada, ahora podés ingresar al sistema.</h2>";
+							      break;
+					        }
+
+				        }
+
+				
+				      ?>
+                <input type="submit" name="submit" value="Ingresar" class="btn-large waves-effect waves-light red darken-3" tabindex="3">
+                <!-- <a href="/" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">Ingresar</a> -->
+              </div>
+
+            </form>
+        
+        <!--<br><br>-->
+
+
         <h5 class="header col s12 light">- <a href="/panel">Ir al panel</a>.</h5>
         <h5 class="header col s12 light">- <a href="/">Inicio</a>.</h5>
       </div>
 
     </div>
-
-
-    <!-- supo ser un buen menú de botones -->
-    <!--
-    <div class="row">
-        <div class="col s12 m4">
-            <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia</a>
-        </div>
-        <div class="col s12 m4">
-            <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia 2</a>
-          </div>
-          <div class="col s12 m4">
-              <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia tres</a>
-            </div>
-      </div>
-    -->
-
   </div>
 
   <footer class="page-footer red darken-3">

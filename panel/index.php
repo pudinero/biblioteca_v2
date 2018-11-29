@@ -16,7 +16,7 @@
   <?php require('../includes/config.php'); 
 
     //if not logged in redirect to login page
-    //if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
+    if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
 
     //define page title
     $title = 'PI';
@@ -85,8 +85,6 @@
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
           $result = mysqli_query($con,"SELECT * FROM Clientes");
 
-          
-
           while($row = mysqli_fetch_array($result)){
             $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
             echo '<tr>';
@@ -131,6 +129,7 @@
           </tbody>
         </table>
         <p><p><p><p>
+        <h5 class="header col s12 light">- <a href="./privilegios.php">Modificar privilegios</a>.</h5>
         <h5 class="header col s12 light">- <a href="/">Volver al inicio</a>.</h5>
       </div>
 
