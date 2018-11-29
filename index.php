@@ -56,7 +56,7 @@
     </div>
   </nav>
 
-  <div id="index-banner" class="parallax-container">
+  <div id="index-banner" class="parallax-container black">
     <div class="section no-pad-bot">
       <div class="container">
         <br><br>
@@ -158,7 +158,7 @@
   </div>
 
 
-  <div class="parallax-container valign-wrapper">
+  <div class="parallax-container valign-wrapper black">
     <div class="section no-pad-bot">
       <div class="container">
         <div class="row center">
@@ -184,7 +184,7 @@
   </div>
 
 
-  <div class="parallax-container valign-wrapper">
+  <div class="parallax-container valign-wrapper black">
     <div class="section no-pad-bot">
       <div class="container">
         <div class="row center">

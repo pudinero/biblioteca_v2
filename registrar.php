@@ -145,7 +145,7 @@ $title = 'PI';
     </div>
   </nav>
 
-  <div id="index-banner" class="parallax-container">
+  <div id="index-banner" class="parallax-container black">
     <div class="section no-pad-bot">
       <div class="container">
         <br><br>
