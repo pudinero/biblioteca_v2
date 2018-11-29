@@ -29,23 +29,22 @@
 <?php
   if(isset($_POST['submit'])){
 
-	  if (!isset($_POST['username'])) $error[] = "Por favor completá todos los campos.";
-	  if (!isset($_POST['password'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['idarticulo'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['s_actual'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['s_minimo'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['s_reponer'])) $error[] = "Por favor completá todos los campos.";
 
-    if($_POST['username'] == NULL){ $error[] = "No ingresaste ID de usuario."; }
-    else if ($_POST['username'] < 1){ $error[] = "El ID de usuario debe ser mayor a 0.";
-    }
-    if($_POST['password'] == NULL){ $error[] = "No ingresaste ID de tipo de usuario."; }
+    if($_POST['idarticulo'] == NULL){ $error[] = "No ingresaste el ID del artículo."; }
+    
     else {
-      if ($_POST['password'] != 1 && $_POST['password'] != 2) { $error[] = "ID Tipo Usuario incorrecto (1 o 2)."; }
-      else {
       $con  = mysqli_connect("localhost","root","12345","Biblioteca");
-      $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE ID_Cliente = :idusuario');
+      $stmt = $db->prepare('INSERT INTO Stock(ID_Articulo, Stock_Actual, Stock_Minimo, Stock_Reponer) VALUES (:idarticulo, :s_actual, :s_minimo, :s_reponer)');
 			$stmt->execute(array(
-        ':idusuario' => $_POST['username'],
-        ':idtipo' => $_POST['password']
+        ':idarticulo' => $_POST['idarticulo'],
+        ':s_actual' => $_POST['s_actual'],
+        ':s_minimo' => $_POST['s_minimo'],
+        ':s_reponer' => $_POST['s_reponer']
 			));
-    }
     }
     
 
@@ -92,39 +91,35 @@
     <br />
     <div class="row">
     
-    <h5 class="header light col s12 left">Lista de usuarios - Establecer privilegios.</h5><br>
+    <h5 class="header light col s12 left">Lista de stock - Alta de stock.</h5><br>
             
       <table class="striped responsive-table truncate col s6">
       
         <thead>
           <tr>
-              <th>ID Cliente</th>
-              <th>ID Tipo Usuario</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Usuario</th>
+              <th>ID Artículo</th>
+              <th>Stock actual</th>
+              <th>Stock mínimo</th>
+              <th>Stock reponer</th>
           </tr>
         </thead>
       <?php
         if($user->is_logged_in()){
           
           $con  =mysqli_connect("localhost","root","12345","Biblioteca");
-          $stmt = $db->prepare('SELECT * FROM Clientes');
+          $stmt = $db->prepare('SELECT * FROM Stock');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
-          $result = mysqli_query($con,"SELECT * FROM Clientes");
+          $result = mysqli_query($con,"SELECT * FROM Stock");
 
           
 
           while($row = mysqli_fetch_array($result)){
-            $nombre = iconv('ISO-8859-1','UTF-8',$row['Nombre']);
-            $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
             echo '<tr>';
-            echo '  <td>', htmlspecialchars($row['ID_Cliente'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['ID_Tipo_Usuario'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($nombre, ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
-            echo '  <td>', htmlspecialchars($row['Usuario'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($row['ID_Articulo'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($row['Stock_Actual'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($row['Stock_Minimo'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($row['Stock_Reponer'], ENT_QUOTES), '</td>';
             echo '</tr>';
           }
         }
@@ -159,13 +154,23 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="icon_prefix username" type="text" class="validate black-text" name="username" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1">
-                  <label for="icon_prefix" class="black-text">ID Usuario</label>
+                  <input id="icon_prefix idarticulo" type="text" class="validate black-text" name="idarticulo" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['idarticulo'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">ID Artículo</label>
                 </div>
                 <div class="input-field col s6">
-                  <i class="material-icons prefix">vpn_key</i>
-                  <input id="icon_telephone password" type="text" class="validate black-text" name="password" tabindex="2">
-                  <label for="icon_telephone" class="black-text">ID Tipo Usuario</label>
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="icon_prefix s_actual" type="text" class="validate black-text" name="s_actual" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['s_actual'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Stock actual</label>
+                </div>
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="icon_prefix s_minimo" type="text" class="validate black-text" name="s_minimo" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['s_minimo'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Stock mínimo</label>
+                </div>
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="icon_prefix s_reponer" type="text" class="validate black-text" name="s_reponer" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['s_reponer'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Stock reponer</label>
                 </div>
               </div>
 

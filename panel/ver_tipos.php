@@ -16,7 +16,7 @@
   <?php require('../includes/config.php'); 
 
     //if not logged in redirect to login page
-    //if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
+    if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
 
     //define page title
     $title = 'PI';
@@ -60,46 +60,32 @@
     <br />
     <div class="row">
     
-      <table class="striped responsive-table col l3 s12">
+    <h5 class="header light col s12 left">Tipos de usuarios.</h5><br>
+            
+      <table class="striped responsive-table truncate col s12">
+      
         <thead>
           <tr>
-              <th>ID Cliente</th>
               <th>ID Tipo Usuario</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Direccion</th>
-              <th>Localidad</th>
-              <th>Teléfono</th>
-              <th>Fecha de alta</th>
-              <th>Correo</th>
-              <th>Usuario</th>
-              <!-- <th>Contraseña</th> -->
+              <th>Descripción</th>
           </tr>
         </thead>
       <?php
         if($user->is_logged_in()){
           
           $con  =mysqli_connect("localhost","root","12345","Biblioteca");
-          $stmt = $db->prepare('SELECT * FROM Clientes');
+          $stmt = $db->prepare('SELECT * FROM Tipo_Usuarios');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
-          $result = mysqli_query($con,"SELECT * FROM Clientes");
+          $result = mysqli_query($con,"SELECT * FROM Tipo_Usuarios");
+
+          
 
           while($row = mysqli_fetch_array($result)){
-            $nombre = iconv('ISO-8859-1','UTF-8',$row['Nombre']);
-            $apellido = iconv('ISO-8859-1','UTF-8',$row['Apellido']);
+            $descripcion = iconv('ISO-8859-1','UTF-8',$row['Descripcion']);
             echo '<tr>';
-            echo '  <td>', htmlspecialchars($row['ID_Cliente'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['ID_Tipo_Usuario'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($nombre, ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($apellido, ENT_NOQUOTES) , '</td>';
-            echo '  <td>', htmlspecialchars($row['Direccion'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Localidad'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Telefono'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Fecha_Alta'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Correo'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Usuario'], ENT_QUOTES), '</td>';
-            //echo '  <td>', htmlspecialchars($row['Clave'], ENT_QUOTES), '</td>';
+            echo '  <td>', $descripcion, '</td>';
             echo '</tr>';
           }
         }
@@ -129,35 +115,16 @@
 
           </tbody>
         </table>
-        <p><p><p><p>
-        <h5 class="header col s12 light">- <a href="./privilegios.php">Modificar privilegios</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./alta_libros.php">Alta de libros</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./descuentos.php">Alta de descuentos</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./facturas.php">Alta de facturas</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./stock.php">Alta de stock</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./precios.php">Alta de precios</a>.</h5>
-        <h5 class="header col s12 light">- <a href="./ver_tipos.php">Ver tipos de usuarios</a>.</h5>
-        <h5 class="header col s12 light">- <a href="/">Volver al inicio</a>.</h5>
+
+        
+        <!--<br><br>-->
+
+
+        <h5 class="header col s12 light">- <a href="/panel">Ir al panel</a>.</h5>
+        <h5 class="header col s12 light">- <a href="/">Inicio</a>.</h5>
       </div>
 
     </div>
-
-
-    <!-- supo ser un buen menú de botones -->
-    <!--
-    <div class="row">
-        <div class="col s12 m4">
-            <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia</a>
-        </div>
-        <div class="col s12 m4">
-            <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia 2</a>
-          </div>
-          <div class="col s12 m4">
-              <a href="uwu.html" id="download-button" class="btn-large waves-effect waves-light deep-purple lighten-3">mandale cumbia tres</a>
-            </div>
-      </div>
-    -->
-
   </div>
 
   <footer class="page-footer red darken-3">
