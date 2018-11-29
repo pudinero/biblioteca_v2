@@ -141,7 +141,7 @@ $title = 'PI';
   <!-- NAVEGACION -->
   <nav class="red darken-3" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="/" class="brand-logo">Biblioteca</a>
+      <a id="logo-container" href="/" class="brand-logo white-text">Biblioteca</a>
     </div>
   </nav>
 

@@ -102,7 +102,7 @@
           echo "   <div class=\"row\">";
           if ($row['ID_Tipo_Usuario'] == 1){
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"/phpmyadmin\">Administrar base de datos (phpMyAdmin)</a>.</h5>";
-            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/panel\">Ver lista de usuarios</a>.</h5>";
+            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/panel\">Ir al panel</a>.</h5>";
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"logout.php\">Finalizar sesión</a>.</h5>"; 
           }
           else {
