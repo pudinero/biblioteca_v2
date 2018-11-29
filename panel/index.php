@@ -73,7 +73,7 @@
               <th>Fecha de alta</th>
               <th>Correo</th>
               <th>Usuario</th>
-              <th>Contraseña</th>
+              <!-- <th>Contraseña</th> -->
           </tr>
         </thead>
       <?php
@@ -97,7 +97,7 @@
             echo '  <td>', htmlspecialchars($row['Fecha_Alta'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Correo'], ENT_QUOTES), '</td>';
             echo '  <td>', htmlspecialchars($row['Usuario'], ENT_QUOTES), '</td>';
-            echo '  <td>', htmlspecialchars($row['Clave'], ENT_QUOTES), '</td>';
+            //echo '  <td>', htmlspecialchars($row['Clave'], ENT_QUOTES), '</td>';
             echo '</tr>';
           }
         }
@@ -127,6 +127,35 @@
 
           </tbody>
         </table>
+        <p><p><p><p>
+
+        <table class="striped responsive-table">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Item Name</th>
+              <th>Item Price</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Alvin</td>
+            <td>Eclair</td>
+            <td>$0.87</td>
+          </tr>
+          <tr>
+            <td>Alan</td>
+            <td>Jellybean</td>
+            <td>$3.76</td>
+          </tr>
+          <tr>
+            <td>Jonathan</td>
+            <td>Lollipop</td>
+            <td>$7.00</td>
+          </tr>
+        </tbody>
+      </table>
       
       </div>
 
