@@ -37,13 +37,13 @@
     else {
 
 
-      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
       $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :usuario');
 			$stmt->execute(array(':usuario' => $_POST['usuario']));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		  if(!empty($row['Usuario'])){
-        $con  = mysqli_connect("localhost","root","","Biblioteca");
+        $con  = mysqli_connect("localhost","root","12345","Biblioteca");
         $stmt = $db->prepare('INSERT INTO Facturas(ID_Cliente, Fecha, Importe) VALUES (:idcliente, :fecha, :importe)');
 			  $stmt->execute(array(
         ':idcliente' => $row['ID_Cliente'],
@@ -118,7 +118,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","","Biblioteca");
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Facturas');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
