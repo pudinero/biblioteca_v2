@@ -15,6 +15,8 @@
 
   <?php require('../includes/config.php'); 
 
+    $a = $_POST['art'];
+
     //if not logged in redirect to login page
     //if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
 
@@ -61,68 +63,59 @@
     <div class="row">
     
     <?php
+
+    /*
+    if($a == 1){
+      echo '<h5>Tocaste el 1 - ', $a, '</h5>';
+    }
+    else{
+      echo '<h5>Tocaste otro que no era el 1 - ', $a, '</h5>';
+    }
+    */
+
+    
       if($user->is_logged_in()){
         
         $con  =mysqli_connect("localhost","root","","Biblioteca");
-        $stmt = $db->prepare('SELECT * FROM Articulos');
-        $stmt->execute(array(':username' => $_SESSION['username']));
+        $stmt = $db->prepare('SELECT * FROM Articulos WHERE ID_Articulo = :a');
+        $stmt->execute(array(':a' => $a));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $result = mysqli_query($con,"SELECT * FROM Articulos");
 
-        while($row = mysqli_fetch_array($result)){
-          
-          //$_SESSION['a'] = $row['ID_Articulo'];
+        $descripcion = iconv('ISO-8859-1','UTF-8',$row['Descripcion']);
 
-          $descripcion = iconv('ISO-8859-1','UTF-8',$row['Descripcion']);
-          
-          echo '<div class="col s12 m6">';
+        echo '<h5>Detalles del artículo: </h5>';
+        echo '<h6>Nombre: ', $row['Descripcion'],'</h6>';
+        
+        $stmt = $db->prepare('SELECT * FROM Precios WHERE ID_Articulo = :idarticulo');
+        $stmt->execute(array(':idarticulo' => $row['ID_Articulo']));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-          echo '<div class="card purple lighten-5">';
-          echo '  <div class="card-content black-text">';
-          echo '    <span class="card-title">', $descripcion, '</span>';
-          echo '    <p>Libro de ', $descripcion, '</p>';
-          echo '  </div>';
-          
-          $stmt = $db->prepare('SELECT * FROM Precios WHERE ID_Articulo = :idarticulo');
-          $stmt->execute(array(':idarticulo' => $row['ID_Articulo']));
-          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo '<h6>Precio: $', $row['Precio'],'</h6>';
 
-          echo '  <div class="card-action">';
-          echo '    <form method="post" action="./comprar.php">';
-          echo '      <input type="hidden" name="art" value="', $row['ID_Articulo'], '">';
-          echo '      <a class="black-text">VALOR: $', $row['Precio'],'</a>';
-          echo '      <button type="submit" class="waves-effect light-green darken-4 btn-floating center right"><i class="small material-icons">attach_money</i></button>';          
-          echo '    </form>';
-          
+        $stmt = $db->prepare('SELECT Stock_Actual FROM Stock WHERE ID_Articulo = :idarticulo');
+        $stmt->execute(array(':idarticulo' => $row['ID_Articulo']));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-          $stmt = $db->prepare('SELECT Stock_Actual FROM Stock WHERE ID_Articulo = :idarticulo');
-          $stmt->execute(array(':idarticulo' => $row['ID_Articulo']));
-          $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-          if($row['Stock_Actual'] == NULL || $row['Stock_Actual'] == 0){
-            echo '    <a class="black-text">STOCK: NO HAY.</a>';
-          }
-          else {
-            echo '    <a class="black-text">STOCK: ', $row['Stock_Actual'],' unidades</a>';
-          }
-
-          echo '  </div>'; 
-          echo '</div>';
-          echo '</div>';
-
+        if($row['Stock_Actual'] == NULL || $row['Stock_Actual'] == 0){
+          echo '<h6>Stock: No hay.</h6>';
         }
+        else {
+          echo '<h6>Stock: ', $row['Stock_Actual'],' unidades.</h6>';
+        }
+        
       }
       else {
         echo '<!-- saraza -->';
         echo '<div class="row">';
         echo '  <div class="col s12 m6">';
-        echo '    <h5>No hay libros disponibles</h5>';
+        echo '    <h5 class="red">ERROR: ID DE ARTÍCULO INVÁLIDO.</h5>';
         echo '  </div>';
         echo '</div>';
         }
+        
     ?>
 
-        <h5 class="header col s12 light">- <a href="/">Volver al inicio</a>.</h5>
+        <h5 class="header col s12 light">- <a href="/usuario/libros.php">Ver más libros</a>.</h5>
       </div>
 
     </div>
