@@ -8,7 +8,7 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
 //database credentials
 define('DBHOST','localhost');
 define('DBUSER','root');
-define('DBPASS','');
+define('DBPASS','12345');
 define('DBNAME','Biblioteca');
 
 //application address

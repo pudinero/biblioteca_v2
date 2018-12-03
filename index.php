@@ -103,9 +103,13 @@
           if ($row['ID_Tipo_Usuario'] == 1){
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"/phpmyadmin\">Administrar base de datos (phpMyAdmin)</a>.</h5>";
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"/panel\">Ir al panel</a>.</h5>";
+            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/usuario/libros.php\">Ver libros</a>.</h5>";
+            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/usuario/facturas.php\">Ver facturas</a>.</h5>";
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"logout.php\">Finalizar sesión</a>.</h5>"; 
           }
           else {
+            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/usuario/libros.php\">Ver libros</a>.</h5>";
+            echo "    <h5 class=\"header col s12 light\"> - <a href=\"/usuario/facturas.php\">Ver facturas</a>.</h5>";
             echo "    <h5 class=\"header col s12 light\"> - <a href=\"logout.php\">Finalizar sesión</a>.</h5>";
           }
           echo "      </div>";

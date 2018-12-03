@@ -44,13 +44,34 @@
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		  if(!empty($row['Descripcion'])){
-        $stmt = $db->prepare('INSERT INTO Stock(ID_Articulo, Stock_Actual, Stock_Minimo, Stock_Reponer) VALUES (:idarticulo, :s_actual, :s_minimo, :s_reponer)');
-			  $stmt->execute(array(
-        ':idarticulo' => $row['ID_Articulo'],
-        ':s_actual' => $_POST['s_actual'],
-        ':s_minimo' => $_POST['s_minimo'],
-        ':s_reponer' => $_POST['s_reponer']
-			));
+
+        $stmt = $db->prepare('SELECT ID_Articulo FROM Stock WHERE ID_Articulo = :idarticulo');
+			  $stmt->execute(array(':idarticulo' => $row['ID_Articulo']));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if(!empty($row['ID_Articulo'])){
+          $stmt = $db->prepare("UPDATE Stock SET Stock_Actual = (:s_actual), Stock_Minimo = (:s_minimo), Stock_Reponer = (:s_reponer) WHERE ID_Articulo = (:idarticulo)");
+          $stmt->execute(array(
+            ':s_actual' => $_POST['s_actual'],
+            ':s_minimo' => $_POST['s_minimo'],
+            ':s_reponer' => $_POST['s_reponer'],
+            ':idarticulo' => $row['ID_Articulo']
+          ));
+        }
+        else { 
+          $stmt = $db->prepare('SELECT * FROM Articulos WHERE Descripcion = :descripcion');
+			    $stmt->execute(array(':descripcion' => $_POST['articulo']));
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+          $stmt = $db->prepare('INSERT INTO Stock(ID_Articulo, Stock_Actual, Stock_Minimo, Stock_Reponer) VALUES (:idarticulo, :s_actual, :s_minimo, :s_reponer)');
+          $stmt->execute(array(
+          ':idarticulo' => $row['ID_Articulo'],
+          ':s_actual' => $_POST['s_actual'],
+          ':s_minimo' => $_POST['s_minimo'],
+          ':s_reponer' => $_POST['s_reponer']
+        ));
+        }
+       
 		  }
       else {
         $error[] = 'Ese artículo no existe.';

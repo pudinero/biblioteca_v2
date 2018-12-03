@@ -15,12 +15,16 @@
 
   <?php require('../includes/config.php'); 
 
+    //if not logged in redirect to login page
+    if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
+
     //define page title
     $title = 'PI';
 
     //include header template
     //require('layout/header.php');
 ?>
+
 
   <!-- NAVEGACION -->
   <nav class="red darken-3" role="navigation">
@@ -57,16 +61,76 @@
     <br />
     <div class="row">
     
-    <?php
+    <h5 class="header light col s12 left">Lista de facturas - Tus facturas.</h5><br>
+            
+      <table class="striped responsive-table truncate col s6">
+      
+        <thead>
+          <tr>
+              <th>Número de factura</th>
+              <th>Fecha y hora</th>
+              <th>Importe</th>
+          </tr>
+        </thead>
+      <?php
+        if($user->is_logged_in()){
+          
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :username');
+					$stmt->execute(array(':username' => $_SESSION['username']));
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    
-    echo '<h2 class="center header col s12 green-text">Compra realizada</h2>';
-    
-    
+          $id = $row['ID_Cliente'];
 
-    ?>
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $stmt = $db->prepare('SELECT * FROM Facturas WHERE ID_Cliente = :id');
+					$stmt->execute(array(':id' => $row['ID_Cliente']));
+          $row = $stmt->fetch(PDO::FETCH_ASSOC);
+          $result = mysqli_query($con,"SELECT * FROM Facturas WHERE ID_Cliente = '$id'");
 
-        <h5 class="center header col s12 light"><a href="/usuario/libros.php">Ver más libros</a>.</h5>
+          
+
+          while($row = mysqli_fetch_array($result)){
+            echo '<tr>';
+            echo '  <td>', htmlspecialchars($row['ID_Factura'], ENT_QUOTES), '</td>';
+            echo '  <td>', htmlspecialchars($row['Fecha'], ENT_QUOTES), '</td>';
+            echo '  <td> $', htmlspecialchars($row['Importe'], ENT_QUOTES), '</td>';
+            echo '</tr>';
+          }
+        }
+        else {
+          echo '<!-- saraza -->';
+          echo '<div class="row">';
+          echo '  <div class="col s12 m6">';
+          echo '    <a href="login.php">';
+          echo '      <div class="icon-block">';
+          echo '        <h2 class="center brown-text"><i class="material-icons">person</i></h2>';
+          echo '        <h5 class="center">Iniciar sesión</h5>';
+          echo '      </div>';
+          echo '    </a>';
+          echo '  </div>';
+          echo ' ';
+          echo '  <div class="col s12 m6">';
+          echo '    <a href="registrar.php">';
+          echo '      <div class="icon-block">';
+          echo '        <h2 class="center brown-text"><i class="material-icons">person_add</i></h2>';
+          echo '        <h5 class="center">Registrarse</h5>';
+          echo '      </div>';
+          echo '    </a>';
+          echo '  </div>';
+          echo '</div>';
+          }
+			?>
+
+          </tbody>
+        </table>
+
+
+        <!--<br><br>-->
+
+
+        <h5 class="header col s12 light">- <a href="/panel">Ir al panel</a>.</h5>
+        <h5 class="header col s12 light">- <a href="/">Inicio</a>.</h5>
       </div>
 
     </div>
