@@ -35,7 +35,7 @@
     
     else {
 
-      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
       $stmt = $db->prepare('SELECT Descripcion FROM Articulos WHERE Descripcion = :descripcion');
 			$stmt->execute(array(':descripcion' => $_POST['descripcion']));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -44,8 +44,7 @@
         $error[] = 'Ese artículo ya existe.'; 
 		  }
       else {
-        //$con  = mysqli_connect("localhost","root","","Biblioteca");
-        $con  = mysqli_connect("localhost","root","","Biblioteca");
+        $con  = mysqli_connect("localhost","root","12345","Biblioteca");
         $stmt = $db->prepare('INSERT INTO Articulos(Descripcion, Fecha_Alta) VALUES (:descripcion, :fecha)');
 			  $stmt->execute(array(
         ':descripcion' => $_POST['descripcion'],
@@ -114,7 +113,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","","Biblioteca");
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Articulos');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
