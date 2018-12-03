@@ -39,7 +39,7 @@
 
 	//very basic validation
 	if(!$user->isValidUsername($username)){
-		$error[] = 'El usuario debe tener 3 caracteres alfanuméricos.';
+		$error[] = 'Ese usuario no es válido.';
 	} else {
 		$stmt = $db->prepare('SELECT Usuario FROM Clientes WHERE Usuario = :username');
 		$stmt->execute(array(':username' => $username));
