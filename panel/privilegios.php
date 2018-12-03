@@ -35,13 +35,12 @@
     if($_POST['username'] == NULL){ $error[] = "No ingresaste el usuario."; }
     if($_POST['password'] == NULL){ $error[] = "No ingresaste ID de tipo de usuario."; }
     else {
-      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
       $stmt = $db->prepare('SELECT Usuario FROM Clientes WHERE Usuario = :username');
 			$stmt->execute(array(':username' => $_POST['username']));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		  if(!empty($row['Usuario'])){
-        //$con  = mysqli_connect("localhost","root","","Biblioteca");
         $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE Usuario = :idusuario');
 			  $stmt->execute(array(
         ':idusuario' => $_POST['username'],
@@ -113,7 +112,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","","Biblioteca");
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Clientes');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
