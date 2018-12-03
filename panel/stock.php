@@ -38,7 +38,7 @@
     
     else {
 
-      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
       $stmt = $db->prepare('SELECT * FROM Articulos WHERE Descripcion = :descripcion');
 			$stmt->execute(array(':descripcion' => $_POST['articulo']));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -118,7 +118,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","","Biblioteca");
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Stock');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
