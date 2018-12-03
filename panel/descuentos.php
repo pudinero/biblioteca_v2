@@ -36,13 +36,13 @@
     else if($_POST['cantidad'] == NULL){ $error[] = "No ingresaste la cantidad de libros."; }
     else {
 
-      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
       $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :username');
 			$stmt->execute(array(':username' => $_POST['usuario']));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		  if(!empty($row['Usuario'])){
-        $con  = mysqli_connect("localhost","root","","Biblioteca");
+        $con  = mysqli_connect("localhost","root","12345","Biblioteca");
         $stmt = $db->prepare('INSERT INTO Descuentos(ID_Cliente, Cant_Libros) VALUES (:idcliente, :cantidad)');
 			  $stmt->execute(array(
         ':idcliente' => $row['ID_Cliente'],
@@ -114,7 +114,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","","Biblioteca");
+          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Descuentos');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
