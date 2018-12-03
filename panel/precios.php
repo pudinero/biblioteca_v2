@@ -29,18 +29,30 @@
 <?php
   if(isset($_POST['submit'])){
 
-    if (!isset($_POST['idarticulo'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['articulo'])) $error[] = "Por favor completá todos los campos.";
     if (!isset($_POST['precio'])) $error[] = "Por favor completá todos los campos.";
 
-    if($_POST['idarticulo'] == NULL){ $error[] = "No ingresaste el ID del artículo."; }
+    if($_POST['articulo'] == NULL){ $error[] = "No ingresaste el ID del artículo."; }
     else if($_POST['precio'] == NULL){ $error[] = "No ingresaste el precio."; }
     else {
-      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
-      $stmt = $db->prepare('INSERT INTO Precios(ID_Articulo, Precio) VALUES (:idarticulo, :precio)');
-			$stmt->execute(array(
-        ':idarticulo' => $_POST['idarticulo'],
+
+      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $stmt = $db->prepare('SELECT * FROM Articulos WHERE Descripcion = :descripcion');
+			$stmt->execute(array(':descripcion' => $_POST['articulo']));
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		  if(!empty($row['Descripcion'])){
+        $stmt = $db->prepare('INSERT INTO Precios(ID_Articulo, Precio) VALUES (:idarticulo, :precio)');
+			  $stmt->execute(array(
+        ':idarticulo' => $row['ID_Articulo'],
         ':precio' => $_POST['precio']
-			));
+			  ));
+		  }
+      else {
+        $error[] = 'Ese artículo no existe.';
+      }
+
+      
     }
     
 
@@ -100,7 +112,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $con  =mysqli_connect("localhost","root","","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Precios');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -147,8 +159,8 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="icon_prefix idarticulo" type="text" class="validate black-text" name="idarticulo" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['idarticulo'], ENT_QUOTES); } ?>" tabindex="1">
-                  <label for="icon_prefix" class="black-text">ID Artículo</label>
+                  <input id="icon_prefix articulo" type="text" class="validate black-text" name="articulo" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['articulo'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Artículo</label>
                 </div>
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>

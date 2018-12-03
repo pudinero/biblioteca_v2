@@ -29,19 +29,34 @@
 <?php
   if(isset($_POST['submit'])){
 
-    if (!isset($_POST['idcliente'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['usuario'])) $error[] = "Por favor completá todos los campos.";
     if (!isset($_POST['importe'])) $error[] = "Por favor completá todos los campos.";
 
-    if($_POST['idcliente'] == NULL){ $error[] = "No ingresaste el ID del cliente."; }
+    if($_POST['usuario'] == NULL){ $error[] = "No ingresaste el usuario."; }
     
     else {
-      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
-      $stmt = $db->prepare('INSERT INTO Facturas(ID_Cliente, Fecha, Importe) VALUES (:idcliente, :fecha, :importe)');
-			$stmt->execute(array(
-        ':idcliente' => $_POST['idcliente'],
+
+
+      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :usuario');
+			$stmt->execute(array(':usuario' => $_POST['usuario']));
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		  if(!empty($row['Usuario'])){
+        $con  = mysqli_connect("localhost","root","","Biblioteca");
+        $stmt = $db->prepare('INSERT INTO Facturas(ID_Cliente, Fecha, Importe) VALUES (:idcliente, :fecha, :importe)');
+			  $stmt->execute(array(
+        ':idcliente' => $row['ID_Cliente'],
         ':fecha' => date("Y-m-d H:i:s"),
         ':importe' => $_POST['importe']
 			));
+		  }
+      else {
+        $error[] = 'Ese usuario no existe.';
+      }
+
+
+      
     }
     
 
@@ -103,7 +118,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $con  =mysqli_connect("localhost","root","","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Facturas');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -151,8 +166,8 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="icon_prefix idcliente" type="text" class="validate black-text" name="idcliente" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['idcliente'], ENT_QUOTES); } ?>" tabindex="1">
-                  <label for="icon_prefix" class="black-text">ID Cliente</label>
+                  <input id="icon_prefix usuario" type="text" class="validate black-text" name="usuario" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['usuario'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Usuario</label>
                 </div>
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>

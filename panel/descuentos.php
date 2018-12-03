@@ -29,18 +29,32 @@
 <?php
   if(isset($_POST['submit'])){
 
-    if (!isset($_POST['idcliente'])) $error[] = "Por favor completá todos los campos.";
+    if (!isset($_POST['usuario'])) $error[] = "Por favor completá todos los campos.";
     if (!isset($_POST['cantidad'])) $error[] = "Por favor completá todos los campos.";
 
-    if($_POST['idcliente'] == NULL){ $error[] = "No ingresaste el ID del cliente."; }
+    if($_POST['usuario'] == NULL){ $error[] = "No ingresaste el ID del cliente."; }
     else if($_POST['cantidad'] == NULL){ $error[] = "No ingresaste la cantidad de libros."; }
     else {
-      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
-      $stmt = $db->prepare('INSERT INTO Descuentos(ID_Cliente, Cant_Libros) VALUES (:idcliente, :cantidad)');
-			$stmt->execute(array(
-        ':idcliente' => $_POST['idcliente'],
+
+      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $stmt = $db->prepare('SELECT * FROM Clientes WHERE Usuario = :username');
+			$stmt->execute(array(':username' => $_POST['usuario']));
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		  if(!empty($row['Usuario'])){
+        $con  = mysqli_connect("localhost","root","","Biblioteca");
+        $stmt = $db->prepare('INSERT INTO Descuentos(ID_Cliente, Cant_Libros) VALUES (:idcliente, :cantidad)');
+			  $stmt->execute(array(
+        ':idcliente' => $row['ID_Cliente'],
         ':cantidad' => $_POST['cantidad']
-			));
+        ));
+        
+		  }
+      else {
+        $error[] = 'Ese usuario no existe.';  
+      }
+
+      
     }
     
 
@@ -100,7 +114,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $con  =mysqli_connect("localhost","root","","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Descuentos');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -147,12 +161,12 @@
               <div class="row">
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="icon_prefix descripcion" type="text" class="validate black-text" name="idcliente" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['idcliente'], ENT_QUOTES); } ?>" tabindex="1">
-                  <label for="icon_prefix" class="black-text">ID Cliente</label>
+                  <input id="icon_prefix usuario" type="text" class="validate black-text" name="usuario" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['usuario'], ENT_QUOTES); } ?>" tabindex="1">
+                  <label for="icon_prefix" class="black-text">Usuario</label>
                 </div>
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="icon_prefix descripcion" type="text" class="validate black-text" name="cantidad" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['cantidad'], ENT_QUOTES); } ?>" tabindex="2">
+                  <input id="icon_prefix cantidad" type="text" class="validate black-text" name="cantidad" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['cantidad'], ENT_QUOTES); } ?>" tabindex="2">
                   <label for="icon_prefix" class="black-text">Cantidad</label>
                 </div>
               </div>

@@ -32,20 +32,25 @@
 	  if (!isset($_POST['username'])) $error[] = "Por favor completá todos los campos.";
 	  if (!isset($_POST['password'])) $error[] = "Por favor completá todos los campos.";
 
-    if($_POST['username'] == NULL){ $error[] = "No ingresaste ID de usuario."; }
-    else if ($_POST['username'] < 1){ $error[] = "El ID de usuario debe ser mayor a 0.";
-    }
+    if($_POST['username'] == NULL){ $error[] = "No ingresaste el usuario."; }
     if($_POST['password'] == NULL){ $error[] = "No ingresaste ID de tipo de usuario."; }
     else {
-      if ($_POST['password'] != 1 && $_POST['password'] != 2) { $error[] = "ID Tipo Usuario incorrecto (1 o 2)."; }
-      else {
-      $con  = mysqli_connect("localhost","root","12345","Biblioteca");
-      $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE ID_Cliente = :idusuario');
-			$stmt->execute(array(
+      $con  = mysqli_connect("localhost","root","","Biblioteca");
+      $stmt = $db->prepare('SELECT Usuario FROM Clientes WHERE Usuario = :username');
+			$stmt->execute(array(':username' => $_POST['username']));
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		  if(!empty($row['Usuario'])){
+        //$con  = mysqli_connect("localhost","root","","Biblioteca");
+        $stmt = $db->prepare('UPDATE Clientes SET ID_Tipo_Usuario = :idtipo WHERE Usuario = :idusuario');
+			  $stmt->execute(array(
         ':idusuario' => $_POST['username'],
         ':idtipo' => $_POST['password']
-			));
-    }
+			  ));
+		  }
+      else {
+        $error[] = 'Ese usuario no existe.';  
+      }
     }
     
 
@@ -108,7 +113,7 @@
       <?php
         if($user->is_logged_in()){
           
-          $con  =mysqli_connect("localhost","root","12345","Biblioteca");
+          $con  =mysqli_connect("localhost","root","","Biblioteca");
           $stmt = $db->prepare('SELECT * FROM Clientes');
 					$stmt->execute(array(':username' => $_SESSION['username']));
           $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -160,7 +165,7 @@
                 <div class="input-field col s6">
                   <i class="material-icons prefix">account_circle</i>
                   <input id="icon_prefix username" type="text" class="validate black-text" name="username" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1">
-                  <label for="icon_prefix" class="black-text">ID Usuario</label>
+                  <label for="icon_prefix" class="black-text">Usuario</label>
                 </div>
                 <div class="input-field col s6">
                   <i class="material-icons prefix">vpn_key</i>
